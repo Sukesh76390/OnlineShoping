@@ -23,7 +23,8 @@ public class ShopStepDefination {
 	CartPage cart;
 	PropertyData data;
 	SoftAssert softasrt = new SoftAssert();
-	
+	long str = System.currentTimeMillis();
+	String formatGmail;
 
 	@Given("Open the browser and enter the url")
 	public void open_the_browser_and_enter_the_url() throws Exception {
@@ -32,7 +33,7 @@ public class ShopStepDefination {
 		driver = new ChromeDriver();
 		driver.get(data.getPropertyData("url"));
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 	}
 
 	@When("Register on the website and Click Signin on the landing page")
@@ -46,7 +47,8 @@ public class ShopStepDefination {
 	public void create_account_by_entering_email_address() throws Exception {
 		data = new PropertyData();
 		reg = new RegistrationPage(driver);
-		reg.enterEmail(data.getPropertyData("mail"));
+		formatGmail = data.getPropertyData("mail") + str + "@gmail.com";
+		reg.enterEmail(formatGmail);
 		reg.clickOnCreate();
 	}
 
@@ -92,10 +94,10 @@ public class ShopStepDefination {
 	public void logout_and_login_again() throws Exception {
 		data = new PropertyData();
 		reg = new RegistrationPage(driver);
-		login= new LoginPage(driver);
+		login = new LoginPage(driver);
 		login.ClickOnLogoutBtn();
 		reg.clickOnLogin();
-		login.EnterEmail(data.getPropertyData("mail"));
+		login.EnterEmail(formatGmail);
 		login.EnterPassword(data.getPropertyData("password"));
 		login.ClickOnLoginBtn();
 	}
@@ -126,7 +128,7 @@ public class ShopStepDefination {
 		home = new HomePage(driver);
 		String actualDress = cart.verifyDress();
 		System.out.println(actualDress);
-		softasrt.assertEquals(actualDress,data.getPropertyData("expected"));
+		softasrt.assertEquals(actualDress, data.getPropertyData("expected"));
 		softasrt.assertAll();
 	}
 }
